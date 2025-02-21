@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatrapati Shivaji Maharaj Quiz Challenge</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #FF6600; /* Orange background */
+            padding: 30px;
+            color: #fff;
+        }
+        .question {
+            font-size: 24px;
+            font-weight: bold;
+            color: black; /* Black color for question text */
+        }
+        .answer {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #4CAF50; /* Green answer button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .answer:hover {
+            background-color: #45a049; /* Darker green when hovered */
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff; /* White background for the quiz area */
+            border-radius: 10px;
+            padding: 20px;
+        }
+        #result {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        #nextBtn {
+            background-color: #FF5733; /* Orange button for 'Next' */
+        }
+        #nextBtn:hover {
+            background-color: #E64A19; /* Darker orange when hovered */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Chatrapati Shivaji Maharaj Quiz Challenge</h1>
+        <div class="question" id="question"></div>
+        <div id="answers"></div>
+        <div id="result"></div>
+        <button id="nextBtn" class="answer" onclick="nextQuestion()">Next Question</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "छत्रपती शिवाजी महाराजांचे वडील कोण होते?",
+                answers: ["शहाजी भोसले", "जीजाबाई", "बाळाजी विश्वनाथ", "रावजी शिंदे"],
+                correct: "शहाजी भोसले"
+            },
+            {
+                question: "छत्रपती शिवाजी महाराजांचा जन्म केव्हा झाला?",
+                answers: ["१६३०", "१६४२", "१६५०", "१६७४"],
+                correct: "१६३०"
+            },
+            {
+                question: "छत्रपती शिवाजी महाराजांची आई कोण होती?",
+                answers: ["जीजाबाई", "ताराबाई", "राजमाता", "रुक्मिणीबाई"],
+                correct: "जीजाबाई"
+            },
+            {
+                question: "छत्रपती शिवाजी महाराजांनी पहिले कोणते किल्ला जिंकला?",
+                answers: ["तोरणा किल्ला", "रायगड किल्ला", "शिवनेरी किल्ला", "सिंधुदुर्ग किल्ला"],
+                correct: "तोरणा किल्ला"
+            },
+            {
+                question: "शिवाजी महाराजांनी सन १६७४ मध्ये आपल्याला मराठा साम्राज्याचा राजा म्हणून काय घोषित केले?",
+                answers: ["१६७४", "१६८०", "१६६५", "१६५९"],
+                correct: "१६७४"
+            },
+            {
+                question: "छत्रपती शिवाजी महाराजांच्या प्रसिद्ध नौदल जनरलचे नाव काय होते?",
+                answers: ["कन्होजी आंग्रे", "तानाजी मालुसरे", "बाजी प्रभू देशपांडे", "धनाजी जाधव"],
+                correct: "कन्होजी आंग्रे"
+            },
+            {
+                question: "शिवाजी महाराजांनी आणि औरंगजेब यांनी कशावर युद्ध केले होते?",
+                answers: ["सिंहगड लढाई", "भूपाळगड लढाई", "प्रतापगड लढाई", "समंगड लढाई"],
+                correct: "प्रतापगड लढाई"
+            },
+            {
+                question: "शिवाजी महाराजांनी आपल्या लहान वयातच कशावर स्वारी केली होती?",
+                answers: ["सिंहगड किल्ला", "राजगड किल्ला", "लोहगड किल्ला", "वयंदर किल्ला"],
+                correct: "सिंहगड किल्ला"
+            },
+            {
+                question: "शिवाजी महाराजांच्या पोशाखात असलेल्या तलवारीचे नाव काय होते?",
+                answers: ["द्वारपाळ तलवार", "सिंदूरी तलवार", "कुंडल तलवार", "झंकार तलवार"],
+                correct: "द्वारपाळ तलवार"
+            },
+            {
+                question: "शिवाजी महाराजांनी कोणत्या युद्धात मराठा सेना जिंकली होती, जिथे वेगवेगळ्या राज्यांच्या समारंभात प्रवेश मिळवला होता?",
+                answers: ["सिंहगड युद्ध", "तुम्बा लढाई", "पन्हाळा लढाई", "वयंदर किल्ला युद्ध"],
+                correct: "सिंहगड युद्ध"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById("question").innerText = currentQuestion.question;
+            const answersDiv = document.getElementById("answers");
+            answersDiv.innerHTML = "";
+            currentQuestion.answers.forEach(answer => {
+                const button = document.createElement("button");
+                button.classList.add("answer");
+                button.innerText = answer;
+                button.onclick = () => checkAnswer(answer);
+                answersDiv.appendChild(button);
+            });
+        }
+
+        function checkAnswer(answer) {
+            const currentQuestion = questions[currentQuestionIndex];
+            if (answer === currentQuestion.correct) {
+                alert("सही उत्तर!");
+            } else {
+                alert("चुकले!");
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                alert("तुम्ही क्विझ पूर्ण केली!");
+            }
+        }
+
+        loadQuestion();
+    </script>
+
+</body>
+</html>
